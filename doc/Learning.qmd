@@ -195,3 +195,75 @@ nhanes_small %>%
   ggplot(aes(x = diabetes, y = bmi)) +
   geom_violin(na.rm = TRUE)
 ```
+
+
+### EXERCISE 9.5 
+## Exercise to make plots with one or two variables
+
+```{r}
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+```
+
+```{r}
+#| layout-ncol: 2
+#| label: fig-diabetes-age
+#| fig-cap: Age at collection and age at diabetes diagnosis 
+#| fig-subcap: 
+#|   - Distribution of age at collection
+#|   - Distribution of age at diabetes diagnosis
+# Distribution of age
+ggplot(nhanes_exercise, aes(x = age)) +
+    geom_density(na.rm = TRUE)
+
+# Distribution of age at diabetes diagnosis
+ggplot(nhanes_exercise, aes(x = diabetes_age)) +
+    geom_density(na.rm = TRUE)
+```
+
+```{r}
+#| label: fig-smokenow-age
+#| fig-cap: People who that are 20 years or more and smoke
+# Number of people who smoke now and are or above 20 years of age,
+# removing those with missing smoking status.
+nhanes_exercise %>% 
+  filter(age >= 20, !is.na(smoke_now)) %>% 
+  ggplot(aes(x = smoke_now)) +
+  geom_bar()
+```
+
+```{r}
+# BMI in relation to mean arterial pressure
+nhanes_exercise %>% 
+  mutate(mean_arterial_pressure = (bp_sys_ave + (2 * bp_dia_ave)) / 3) %>% 
+  ggplot(aes(x = bmi, y = mean_arterial_pressure)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
+```
+
+### Plotting three or more varaibles
+```{r}
+# Plotting systolic BP in relation to educational status and diabetes (two categorial and one continous)
+
+nhanes_small %>% 
+    filter(!is.na(diabetes), !is.na(education)) %>% 
+    ggplot(aes(x = education, y = bp_sys_ave, colour = diabetes)) +
+    geom_boxplot(na.rm = TRUE)
+```
+###Plotting three continous variables
+
+```{r}
+# Plotting BMI in relation to systolic BP and age 
+
+nhanes_small %>% 
+    ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+    geom_point(na.rm = TRUE)
+```
+
+
+
+
+
+
