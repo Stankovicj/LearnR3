@@ -157,32 +157,41 @@ nhanes_small %>%
 ### Plotting two variables
 
 ```{r}
-#Plotting two continous variables 
+# Plotting two continous variables
 ggplot(nhanes_small, aes(x = bmi, y = bp_sys_ave)) +
-    geom_hex(na.rm = TRUE)
+  geom_hex(na.rm = TRUE)
 ```
 
 ```{r}
-#Adding a regression line / Add a smoothing line with confidence intervals
+# Adding a regression line / Add a smoothing line with confidence intervals
 
 ggplot(nhanes_small, aes(x = bmi, y = bp_sys_ave)) +
-    geom_hex(na.rm = TRUE) +
-    geom_smooth(na.rm = TRUE)
-
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
 ```
 ```{r}
-#Plotting two discrete/categorical variables 
-nhanes_small %>% 
-    filter(!is.na(education), !is.na(diabetes)) %>% 
-    ggplot(aes(x = diabetes, fill = education)) +
-    geom_bar()
+# Plotting two discrete/categorical variables
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar()
 ```
 
+```{r}
+# Two categorical data represented side by side ("dodged" barplot)
 
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
 
+### Plotting continous and discrete variables
 
-
-
-
-
-
+```{r}
+# Using mixed data
+nhanes_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE)
+```
